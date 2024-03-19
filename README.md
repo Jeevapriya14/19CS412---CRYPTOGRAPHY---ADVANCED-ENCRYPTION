@@ -133,48 +133,59 @@ one’s secret key power of a mod p.
 ## PROGRAM: 
 
 ```
-#include <math.h>
+
 #include <stdio.h>
-// Power function to return value of a ^ b mod P
-long long int power(long long int a, long long int b,
-long long int P)
-{
-if (b == 1)
-return a;
-else
-return (((long long int)pow(a, b)) % P);
+#include <math.h>
+
+int power(int a, int b, int mod) {
+    int result = 1;
+    a = a % mod;
+    while (b > 0) {
+        if (b & 1)
+            result = (result * a) % mod;
+        b = b >> 1;
+        a = (a * a) % mod;
+    }
+    return result;
 }
-int main()
-{
-long long int P, G, x, a, y, b, ka, kb;
-// Both the persons will be agreed upon the
-// public keys G and P
-printf("Enter the value of P:");
-scanf("%lld",&P); // A prime number P is taken
-printf("The value of P : %lld\n", P);
-printf("Enter the value of G:");
-scanf("%lld",&G); // A primitive root for P, G is taken
-printf("The value of G : %lld\n\n", G);
-// Alice will choose the private key a
-a = 4; // a is the chosen private key
-printf("The private key a for Alice : %lld\n", a);
-x = power(G, a, P); // gets the generated key
-// Bob will choose the private key b
-b = 3; // b is the chosen private key
-printf("The private key b for Bob : %lld\n\n", b);
-y = power(G, b, P); // gets the generated key
-// Generating the secret key after the exchange
-// of keys
-ka = power(y, a, P); // Secret key for Alice
-kb = power(x, b, P); // Secret key for Bob
-printf("Secret key for the Alice is : %lld\n", ka);
-printf("Secret Key for the Bob is : %lld\n", kb);
-return 0;
+
+void diffieHellman(int prime, int root) {
+    int privateKeyA, privateKeyB;
+    int publicKeyA, publicKeyB;
+    int secretKeyA, secretKeyB;
+
+    printf("Enter private key for user A: ");
+    scanf("%d", &privateKeyA);
+    printf("Enter private key for user B: ");
+    scanf("%d", &privateKeyB);
+
+    
+    publicKeyA = power(root, privateKeyA, prime);
+    publicKeyB = power(root, privateKeyB, prime);
+
+    secretKeyA = power(publicKeyB, privateKeyA, prime);
+    secretKeyB = power(publicKeyA, privateKeyB, prime);
+
+    printf("Shared secret key computed by user A: %d\n", secretKeyA);
+    printf("Shared secret key computed by user B: %d\n", secretKeyB);
+}
+
+int main() {
+    int prime, root;
+
+    printf("Enter prime number: ");
+    scanf("%d", &prime);
+    printf("Enter primitive root: ");
+    scanf("%d", &root);
+
+    diffieHellman(prime, root);
+
+    return 0;
 }
 ```
 ## OUTPUT:
 
-<img width="342" alt="image" src="https://github.com/AlluguriSrikrishnateja/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/118343892/a3f5b0fa-ef81-4215-9521-2a16c87cef68">
+![image](https://github.com/Jeevapriya14/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121003043/dff27e07-c1aa-45c8-8067-ec4b98eb59c5)
 
 
 ## RESULT: 
