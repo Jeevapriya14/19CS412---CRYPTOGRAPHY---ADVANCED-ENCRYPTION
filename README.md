@@ -24,67 +24,75 @@ STEP-7: Decryption is done as cipherdmod n.
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-// Function to calculate greatest common divisor (GCD)
+
 int gcd(int a, int b) {
-if (b == 0)
-return a;
-return gcd(b, a % b);
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
 }
-// Function to generate RSA keys
+
 void generateRSAKeys(int *n, int *e, int *d) {
-// Choose two prime numbers (p and q)
-int p;
-int q;
-printf("enter two prime numbers:");
-scanf("%d %d",&p,&q);
-// Calculate n = p * q
-*n = p * q;
-// Calculate Euler's totient function (φ(n))
-int phi = (p - 1) * (q - 1);
-// Choose a public exponent (e) such that 1 < e < φ(n) and gcd(e, φ(n)) = 1
-*e = 5; // You can choose a different value for e, typically a prime number
-// Calculate the private exponent (d) such that (d * e) % φ(n) = 1
-*d = 0;
-while ((*d * *e) % phi != 1) {
-(*d)++;
+    int p, q;
+    printf("Enter two prime numbers: ");
+    scanf("%d %d", &p, &q);
+
+    *n = p * q;
+
+    int phi = (p - 1) * (q - 1);
+
+
+    *e = 5;
+
+    *d = 0;
+    while ((*d * *e) % phi != 1) {
+        (*d)++;
+    }
 }
-}
-// Function to perform modular exponentiation (base^exponent % modulus)
+
 int modExp(int base, int exponent, int modulus) {
-int result = 1;
-while (exponent > 0) {
-if (exponent % 2 == 1) {
-result = (result * base) % modulus;
+    int result = 1;
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result = (result * base) % modulus;
+        }
+        base = (base * base) % modulus;
+        exponent /= 2;
+    }
+    return result;
 }
-base = (base * base) % modulus;
-exponent /= 2;
-}
-return result;
-}
-// Function to encrypt a message using the public key
+
 int encrypt(int message, int publicKey, int modulus) {
-return modExp(message, publicKey, modulus);
+    return modExp(message, publicKey, modulus);
 }
-// Function to decrypt a message using the private key
+
 int decrypt(int ciphertext, int privateKey, int modulus) {
-return modExp(ciphertext, privateKey, modulus);
+    return modExp(ciphertext, privateKey, modulus);
 }
+
 int main() {
-int n, e, d;
-int plaintext;
-printf("enter plaintext:");
-scanf("%d",&plaintext);
-generateRSAKeys(&n, &e, &d);
-printf("Original message: %d\n", plaintext);
-int ciphertext = encrypt(plaintext, e, n);
-printf("Encrypted message: %d\n", ciphertext);
-int decryptedMessage = decrypt(ciphertext, d, n);
-printf("Decrypted message: %d\n", decryptedMessage);
-return 0;
+    int n, e, d;
+    int plaintext;
+
+    printf("Enter plaintext: ");
+    scanf("%d", &plaintext);
+
+    generateRSAKeys(&n, &e, &d);
+
+    printf("Original message: %d\n", plaintext);
+
+    int ciphertext = encrypt(plaintext, e, n);
+    printf("Encrypted message: %d\n", ciphertext);
+
+    int decryptedMessage = decrypt(ciphertext, d, n);
+    printf("Decrypted message: %d\n", decryptedMessage);
+
+    return 0;
 }
+
+
 ```
 ## OUTPUT:
-![Screenshot 2024-03-05 113517](https://github.com/AlluguriSrikrishnateja/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/118343892/b96f8704-db74-4fb0-835d-078d58644625)
+![image](https://github.com/Jeevapriya14/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121003043/80717dd0-fb33-4121-8985-e2c289a138b0)
 
 
 ## RESULT :
